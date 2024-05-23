@@ -21,7 +21,7 @@ public class UsuarioRepositoryMySQLImpl implements UsuarioRepository {
     @Override
     public Usuario buscarPorEmail(String email) {
         // TODO: Retornar um usuário existente com base no e-mail recebido como parametro.
-        return null;
+        return dao.buscarPorEmail(email);
     }
 
     @Override
@@ -34,6 +34,11 @@ public class UsuarioRepositoryMySQLImpl implements UsuarioRepository {
         //TODO: Buscar usuario existente e atualizar os dados, persistindo a alteração.
         Usuario usuarioExistente = dao.buscarPorEmail(usuario.getEmail());
         //TODO: Atualizar o usuario
+        if (usuarioExistente != null) {
+            usuarioExistente.setNome(usuario.getNome());
+            usuarioExistente.setSenha(usuario.getSenha());
+            dao.atualizar(usuarioExistente);
+        }
         return null;
     }
 
