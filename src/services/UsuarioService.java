@@ -39,7 +39,10 @@ public class UsuarioService {
         try {
         validarId(id);
         repository.excluir(id);
+    } catch (Exception e) {
+        logger.log(Level.SEVERE, "Falha ao excluir usuário", e);
     }
+}
 
     private void validarId(Integer id) {
         if (Objects.isNull(id))
