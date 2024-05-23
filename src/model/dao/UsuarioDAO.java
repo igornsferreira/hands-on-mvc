@@ -7,12 +7,12 @@ import model.Usuario;
 
 public class UsuarioDAO implements IUsuarioDAO {
 
-    // TODO: Incluir dependencia de conexao
+    // TODO: Incluir dependencia de conexao (FEITO)
     private final Connection conexao;
 
-    // TODO: Fazer inversão/injeção de dependencia
-    public UsuarioDAO(Connection connection) {
-        this.conexao = connection;
+    // TODO: Fazer inversão/injeção de dependencia (FEITO)
+    public UsuarioDAO(Connection conexao) {
+        this.conexao = conexao;
         init();
     }
 
@@ -51,18 +51,49 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public Usuario buscarPorEmail(String email) {
-        // TODO: Buscar usuário em base de dados por e-mail
+        // TODO: Buscar usuário em base de dados por e-mail (FEITO)
+        String sql = "SELECT * FROM fatec.usuarios WHERE email = ?";
+        try (PreparedStatement stm = conexao.prepareStatement(sql)) {
+            stm.setString(1, email);
+            try (ResultSet rst = stm.executeQuery()) {
+                if (rst.next()) {
+                    Usuario usuario = new Usuario();
+                    usuario.setNome(rst.getString("nome"));
+                    usuario.setEmail(rst.getString("email"));
+                    usuario.setSenha(rst.getString("senha"));
+                    return usuario;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar usuário por e-mail: " + e.getMessage());
+        }
         return null;
     }
 
     @Override
     public void atualizar(Usuario usuario) {
-        // TODO: Atualizar usuário existente em base de dados
+        // TODO: Atualizar usuário existente em base de dados (FEITO)
+        String sql = "UPDATE fatec.usuarios SET nome = ?, senha = ? WHERE email = ?";
+        try (PreparedStatement stm = conexao.prepareStatement(sql)) {
+            stm.setString(1, usuario.getNome());
+            stm.setString(2, usuario.getSenha());
+            stm.setString(3, usuario.getEmail());
+            stm.executeUpdate();
+        }catch (SQLException e) {
+            System.out.println("Erro ao atualizar usuário: " + e.getMessage());
+        }
     }
 
     @Override
     public void exluir(Integer id) {
-        // TODO: Atualizar usuário existente em base de dados
+        // TODO: Atualizar usuário existente em base de dados (FEITO)
+        String sql = "DELETE FROM fatec.usuarios WHERE id = ?";
+        try (PreparedStatement stm = conexao.prepareStatement(sql)) {
+            stm.setInt(1, id);
+            stm.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Erro ao excluir usuário: " + e.getMessage());
+        }
     }
 
     @Override
