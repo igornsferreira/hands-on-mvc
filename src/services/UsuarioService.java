@@ -30,6 +30,10 @@ public class UsuarioService {
         return repository.obterTodos();
     }
 
+    public Usuario buscarPorEmail(String email) {
+        return repository.buscarPorEmail(email);
+    }
+
     public Usuario atualizar(Usuario usuario) {
         validar(usuario, true);
         return repository.atualizar(usuario);

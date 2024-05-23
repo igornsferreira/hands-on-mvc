@@ -18,10 +18,9 @@ public class MvcApp {
          */
         Connection conexao = ConexaoFactory.getConexao();
         IUsuarioDAO dao = new UsuarioDAO(conexao);
-        UsuarioRepository reposirory = new UsuarioRepositoryMySQLImpl(dao);
+        UsuarioRepository repository = new UsuarioRepositoryMySQLImpl(dao);
 
-        UsuarioMemoriaRepositoryImpl repo = new UsuarioMemoriaRepositoryImpl();
-        UsuarioService service = new UsuarioService(repo);
+        UsuarioService service = new UsuarioService(repository);
         
         /*
          * Utilize as leituras em console se preferir.
@@ -38,19 +37,30 @@ public class MvcApp {
         Usuario u1 = new Usuario(null, "Nome", "email@email.com", "123edc");
 
          // Chamada do metodo de persistencia
-        // TODO: Descomente o trecho abaixo para persisitir em baco de dados e consulte o banco de dados
-        //service.salvar(u1);
+        service.criar(u1);
 
-        //TODO: Criar mais 2 usuarios.
+        Usuario u2 = new Usuario(null, "Nome2", "email2@email.com", "456edc");
+        Usuario u3 = new Usuario(null, "Nome3", "email3@email.com", "789edc");
+        service.criar(u2);
+        service.criar(u3);
 
-        //TODO: Exibir os usuarios cadastrados
+        List<Usuario> usuarios = service.obterTodos();
+        System.out.println("Usuários cadastrados:");
+        for (Usuario usuario : usuarios) {
+            System.out.println(usuario);
+        }
 
-        // TODO: Remover o primeiro usuario criado.
+        service.excluir(u1.getId());
 
-        // TODO: Buscar e exibir o segundo usuario criado com base no e-mail
 
-        // TODO: Exibir os usuarios cadastrados
+        Usuario usuarioEncontrado = service.buscarPorEmail(u2.getEmail());
+        System.out.println("Segundo usuário encontrado:");
+        System.out.println(usuarioEncontrado);
 
-        // TODO: Altere o repositório MySQL pelo repositório em memória    
+        usuarios = service.obterTodos();
+        System.out.println("Usuários cadastrados após remoção:");
+        for (Usuario usuario : usuarios) {
+            System.out.println(usuario);
+        }
     }
-}
+} 

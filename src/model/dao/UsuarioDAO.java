@@ -7,10 +7,8 @@ import model.Usuario;
 
 public class UsuarioDAO implements IUsuarioDAO {
 
-    // TODO: Incluir dependencia de conexao (FEITO)
     private final Connection conexao;
 
-    // TODO: Fazer inversão/injeção de dependencia (FEITO)
     public UsuarioDAO(Connection conexao) {
         this.conexao = conexao;
         init();
@@ -21,7 +19,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         String createTable = "CREATE TABLE IF NOT EXISTS fatec.usuarios("
                 + "id INT PRIMARY KEY AUTO_INCREMENT, "
                 + "nome VARCHAR(100) NOT NULL, "
-                + "email VARCHAR(100) NOT NULL UNIQUEEsdra, "
+                + "email VARCHAR(100) NOT NULL UNIQUE, "
                 + "senha VARCHAR(100) NOT NULL);";
 
         try (Statement stm = conexao.createStatement()) {
@@ -51,7 +49,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public Usuario buscarPorEmail(String email) {
-        // TODO: Buscar usuário em base de dados por e-mail (FEITO)
         String sql = "SELECT * FROM fatec.usuarios WHERE email = ?";
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
             stm.setString(1, email);
@@ -72,7 +69,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public void atualizar(Usuario usuario) {
-        // TODO: Atualizar usuário existente em base de dados (FEITO)
         String sql = "UPDATE fatec.usuarios SET nome = ?, senha = ? WHERE email = ?";
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
             stm.setString(1, usuario.getNome());
@@ -86,7 +82,6 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public void exluir(Integer id) {
-        // TODO: Atualizar usuário existente em base de dados (FEITO)
         String sql = "DELETE FROM fatec.usuarios WHERE id = ?";
         try (PreparedStatement stm = conexao.prepareStatement(sql)) {
             stm.setInt(1, id);
